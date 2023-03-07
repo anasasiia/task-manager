@@ -1,0 +1,63 @@
+plugins {
+	id 'java'
+	id 'application'
+	id 'checkstyle'
+	id 'org.springframework.boot' version '3.1.0-SNAPSHOT'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'hexlet.code'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+application {
+	mainClass = 'hexlet.code.App'
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+
+	annotationProcessor(
+			'org.projectlombok:lombok:1.18.22',
+			'com.querydsl:querydsl-apt:5.0.0:jpa',
+			'javax.annotation:javax.annotation-api:1.3.2',
+			'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final'
+	)
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	implementation(
+			'org.springframework.boot:spring-boot-starter-data-jpa',
+			'org.springframework.boot:spring-boot-starter-web',
+			'org.springframework.boot:spring-boot-starter-actuator',
+			'org.springframework.boot:spring-boot-starter-validation',
+			'org.springframework.boot:spring-boot-starter-security',
+			'io.jsonwebtoken:jjwt:0.9.1'
+	)
+
+	runtimeOnly (
+			'com.h2database:h2:1.4.200',
+			'org.postgresql:postgresql:42.2.24'
+	)
+
+	testImplementation(
+			'org.springframework.boot:spring-boot-starter-security',
+			'org.springframework.security:spring-security-test:5.5.1',
+			'org.springframework.boot:spring-boot-starter-test',
+			'com.tobedevoured.modelcitizen:spring:0.8.3'
+	)
+
+}
+
+task stage(dependsOn: [clean, installDist])
+installDist.mustRunAfter clean
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+
