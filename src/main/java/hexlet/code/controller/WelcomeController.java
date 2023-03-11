@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("/welcome")
-public class WelcomeController {
+public final class WelcomeController {
 
     @GetMapping(path = "")
     public void sayWelcome() {
