@@ -6,12 +6,6 @@ clean:
 build:
 	./gradlew clean build
 
-install:
-	./gradlew clean install
-
-run-dist:
-	./build/install/java-package/bin/java-package
-
 start-dist:
 	APP_ENV=production ./build/install/app/bin/app
 
