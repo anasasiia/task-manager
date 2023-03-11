@@ -1,9 +1,9 @@
-FROM gradle:7.4.0-jdk17
+FROM gradle:7.6.1-jdk17
 
 WORKDIR /src
 
-COPY /src .
+COPY ./ .
 
-RUN gradle installDist
+RUN curl -L https://services.gradle.org/distributions/gradle-7.6.1-bin.zip -o gradle-7.6.1-bin.zip
 
-CMD ./build/install/app/bin/app
+CMD ./build/install/app/bin
