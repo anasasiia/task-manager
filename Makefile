@@ -1,4 +1,5 @@
-.DEFAULT_GOAL := build-run
+setup:
+	gradle wrapper --gradle-version 7.3
 
 clean:
 	./gradlew clean
@@ -6,11 +7,20 @@ clean:
 build:
 	./gradlew clean build
 
-start-dist:
-	APP_ENV=production ./build/install/app/bin/app
+start:
+	./gradlew bootRun --args='--spring.profiles.active=dev'
 
-run:
-	./gradlew run
+start-prod:
+	./gradlew bootRun --args='--spring.profiles.active=prod'
+
+install:
+	./gradlew installDist
+
+start-dist:
+	./build/install/app/bin/app
+
+lint:
+	./gradlew checkstyleMain checkstyleTest
 
 test:
 	./gradlew test
@@ -18,13 +28,11 @@ test:
 report:
 	./gradlew jacocoTestReport
 
-lint:
-	./gradlew checkstyleMain checkstyleTest
+check-updates:
+	./gradlew dependencyUpdates
 
-update-deps:
-	./gradlew useLatestVersions
+generate-migrations:
+	gradle diffChangeLog
 
-
-build-run: build run
-
-.PHONY: build
+db-migrate:
+	./gradlew update
