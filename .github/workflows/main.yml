@@ -44,3 +44,4 @@ jobs:
         with:
           context: .
           push: true
+          tags: anasasiia/java-project-73:latest
