@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+//import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -40,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class UserControllerTest {
 
+    private final String baseUrl = "/api";
+
     @Autowired
     private UserRepository userRepository;
 
@@ -63,7 +65,7 @@ public class UserControllerTest {
         utils.regDefaultUser();
         final User expectedUser = userRepository.findAll().get(0);
         final var response = utils.perform(
-                        get("/api" + USER_CONTROLLER_PATH + ID, expectedUser.getId()),
+                        get(baseUrl + USER_CONTROLLER_PATH + ID, expectedUser.getId()),
                         expectedUser.getEmail()
                 ).andExpect(status().isOk())
                 .andReturn()
@@ -90,7 +92,7 @@ public class UserControllerTest {
     @Test
     public void getAllUsers() throws Exception {
         utils.regDefaultUser();
-        final var response = utils.perform(get("/api" + USER_CONTROLLER_PATH))
+        final var response = utils.perform(get(baseUrl + USER_CONTROLLER_PATH))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
@@ -139,7 +141,7 @@ public class UserControllerTest {
 
         final var userDto = new UserDto(TEST_EMAIL_2, "new name", "new last name", "new pwd");
 
-        final var updateRequest = put("/api" + USER_CONTROLLER_PATH + ID, userId)
+        final var updateRequest = put(baseUrl + USER_CONTROLLER_PATH + ID, userId)
             .content(asJson(userDto))
             .contentType(APPLICATION_JSON);
 
@@ -156,7 +158,7 @@ public class UserControllerTest {
 
         final Long userId = userRepository.findByEmail(TEST_EMAIL_1).get().getId();
 
-        utils.perform(delete("/api" + USER_CONTROLLER_PATH + ID, userId), TEST_EMAIL_1)
+        utils.perform(delete(baseUrl + USER_CONTROLLER_PATH + ID, userId), TEST_EMAIL_1)
                 .andExpect(status().isOk());
 
         assertEquals(0, userRepository.count());

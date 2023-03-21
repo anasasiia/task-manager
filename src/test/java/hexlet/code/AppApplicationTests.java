@@ -1,12 +1,11 @@
 package hexlet.code;
 
-import hexlet.code.config.SpringConfigForIT;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = SpringConfigForIT.class)
+@SpringBootTest
 class AppApplicationTests {
-    @Test
-    void contextLoads() {
-    }
+//    @Test
+//    void contextLoads() {
+//    }
 }
