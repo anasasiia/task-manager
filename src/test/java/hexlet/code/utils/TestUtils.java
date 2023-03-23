@@ -3,7 +3,8 @@ package hexlet.code.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import hexlet.code.component.JWTHelper;
+import hexlet.code.auth.AuthenticationRequest;
+import hexlet.code.component.JWTHelper;
 import hexlet.code.dto.UserDto;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
@@ -39,8 +40,8 @@ public final class TestUtils {
     private MockMvc mockMvc;
     @Autowired
     private UserRepository userRepository;
-//    @Autowired
-//    private JWTHelper jwtHelper;
+    @Autowired
+    private JWTHelper jwtHelper;
     public void tearDown() {
         userRepository.deleteAll();
     }
@@ -48,7 +49,8 @@ public final class TestUtils {
         return userRepository.findByEmail(email).get();
     }
     public ResultActions regDefaultUser() throws Exception {
-        return regUser(testRegistrationDto);
+        regUser(testRegistrationDto);
+        return loginUser(AuthenticationRequest.builder().email(TEST_EMAIL_1).password("pwd").build());
     }
     public ResultActions regUser(final UserDto dto) throws Exception {
         final var request = post("/api" + USER_CONTROLLER_PATH)
@@ -58,22 +60,19 @@ public final class TestUtils {
     return perform(request);
     }
 
-//    public String buildToken(Object userId) {
-//        return jwtHelper.expiring(Map.of(SPRING_SECURITY_FORM_USERNAME_KEY, userId));
-//    }
+    public ResultActions loginUser(AuthenticationRequest authrequest) throws Exception {
+        final var request = post("/api/login")
+                .content(asJson(authrequest))
+                .contentType(APPLICATION_JSON);
 
-    public ResultActions perform(final MockHttpServletRequestBuilder request, final String byUser) throws Exception {
-        final Long userId = userRepository.findByEmail(byUser)
-                .map(User::getId)
-                .orElse(null);
-
-//        final String token = buildToken(userId);
         return perform(request);
     }
 
-    public ResultActions performWithToken(final MockHttpServletRequestBuilder request,
-                                        final String token) throws Exception {
+    public ResultActions perform(final MockHttpServletRequestBuilder request, final String byUser) throws Exception {
+        final User user = userRepository.findByEmail(byUser).orElseThrow();
+        final String token = jwtHelper.generateToken(user);
         request.header(AUTHORIZATION, token);
+
         return perform(request);
     }
 
