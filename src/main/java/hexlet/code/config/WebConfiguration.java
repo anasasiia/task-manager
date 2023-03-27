@@ -14,8 +14,8 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     private final String baseApiPath;
 
-    public WebConfiguration(@Value("${base-url}") String baseApiPath) {
-        this.baseApiPath = baseApiPath;
+    public WebConfiguration(@Value("${base-url}") String baseApiPath1) {
+        this.baseApiPath = baseApiPath1;
     }
 
     @Override
@@ -36,8 +36,8 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .addResolver(new PathResourceResolver() {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                        if (resourcePath.startsWith(baseApiPath) ||
-                                resourcePath.startsWith(baseApiPath.substring(1))) {
+                        if (resourcePath.startsWith(baseApiPath)
+                                || resourcePath.startsWith(baseApiPath.substring(1))) {
                             return null;
                         }
 

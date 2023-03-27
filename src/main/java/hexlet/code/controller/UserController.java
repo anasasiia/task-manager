@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
@@ -24,7 +25,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @AllArgsConstructor
 @RequestMapping("${base-url}" + USER_CONTROLLER_PATH)
-public final class UserController {
+public class UserController {
     public static final String USER_CONTROLLER_PATH = "/users";
     public static final String ID = "/{id}";
 
@@ -36,7 +37,7 @@ public final class UserController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public User create(@RequestBody final UserDto dto) {
+    public User create(@RequestBody @Valid final UserDto dto) {
         return service.createNewUser(dto);
     }
 
@@ -52,7 +53,7 @@ public final class UserController {
 
     @PutMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
-    public User update(@PathVariable final long id, @RequestBody final UserDto dto) {
+    public User update(@PathVariable final long id, @RequestBody @Valid final UserDto dto) {
         return service.updateUser(id, dto);
     }
     @DeleteMapping(ID)
