@@ -22,6 +22,9 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.List;
 
+import static hexlet.code.controller.StatusController.ID;
+import static hexlet.code.controller.StatusController.STATUS_CONTROLLER_PATH;
+import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
 import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -48,6 +51,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 loginRequest,
                 new AntPathRequestMatcher(baseUrl + USER_CONTROLLER_PATH, POST.toString()),
                 new AntPathRequestMatcher(baseUrl + USER_CONTROLLER_PATH, GET.toString()),
+                new AntPathRequestMatcher(baseUrl + STATUS_CONTROLLER_PATH, GET.toString()),
+                new AntPathRequestMatcher(baseUrl + TASK_CONTROLLER_PATH, GET.toString()),
+                new AntPathRequestMatcher(baseUrl + LOGIN, POST.toString()),
                 new NegatedRequestMatcher(new AntPathRequestMatcher(baseUrl + "/**"))
         );
         this.userDetailsService = userDetailsService1;

@@ -44,9 +44,7 @@ dependencies {
 			'io.jsonwebtoken:jjwt-api:0.11.5',
 			'io.jsonwebtoken:jjwt-impl:0.11.5',
 			'io.jsonwebtoken:jjwt-jackson:0.11.5',
-			// Зависимость для swagger
-			// Позволяет сгенерировать и проматривать интерактивную документацию по API
-			'org.springdoc:springdoc-openapi-ui:1.5.12',
+			'org.springdoc:springdoc-openapi-ui:1.6.15',
 			'org.liquibase:liquibase-core:4.6.1',
 			'com.querydsl:querydsl-core:5.0.0',
 			'com.querydsl:querydsl-jpa:5.0.0',
@@ -114,38 +112,34 @@ jacocoTestReport {
 	}
 }
 
-// Сборка фронтенда.
-// Выполняется только если ничего не изменилось.
-// *****************************************************************************
-//frontend {
-//	nodeVersion = '16.13.1'
-//	installScript = 'install'
-//	assembleScript = 'run build'
-//	packageJsonDirectory = file("${projectDir}/frontend")
-//}
-//
-//def configFrontendTasks = {
-//	inputs.files(fileTree("$projectDir/frontend").exclude('build', 'node_modules'))
-//	outputs.dir("$buildDir/resources/main/static")
-//}
+frontend {
+	nodeVersion = '16.13.1'
+	installScript = 'install'
+	assembleScript = 'run build'
+	packageJsonDirectory = file("${projectDir}/frontend")
+}
 
-//assembleFrontend {
-//	configure configFrontendTasks
-//
-//	doLast {
-//		copy {
-//			from "$projectDir/frontend/build"
-//			into "$buildDir/resources/main/static"
-//		}
-//	}
-//}
-//
-//installFrontend {
-//	configure configFrontendTasks
-//}
-//
-//processResources.dependsOn assembleFrontend
-// *****************************************************************************
+def configFrontendTasks = {
+	inputs.files(fileTree("$projectDir/frontend").exclude('build', 'node_modules'))
+	outputs.dir("$buildDir/resources/main/static")
+}
+
+assembleFrontend {
+	configure configFrontendTasks
+
+	doLast {
+		copy {
+			from "$projectDir/frontend/build"
+			into "$buildDir/resources/main/static"
+		}
+	}
+}
+
+installFrontend {
+	configure configFrontendTasks
+}
+
+processResources.dependsOn assembleFrontend
 
 // Таска нужная heroku для деплоя
 task stage(dependsOn: [clean, installDist])
