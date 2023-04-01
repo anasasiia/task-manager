@@ -19,16 +19,18 @@ import static org.springframework.security.web.authentication.UsernamePasswordAu
 
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
     private static final String BEARER = "Bearer";
+
     private final RequestMatcher publicUrls;
     private final JWTHelper jwtHelper;
-    public JWTAuthorizationFilter(final RequestMatcher publicUrls1,
-                                  final JWTHelper jwtHelper1) {
-        this.publicUrls = publicUrls1;
-        this.jwtHelper = jwtHelper1;
+
+    public JWTAuthorizationFilter(final RequestMatcher publicUrls,
+                                  final JWTHelper jwtHelper) {
+        this.publicUrls = publicUrls;
+        this.jwtHelper = jwtHelper;
     }
 
     @Override
-    protected boolean shouldNotFilter(final HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(final HttpServletRequest request) {
         return publicUrls.matches(request);
     }
 
@@ -36,6 +38,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
+
         final var authToken = Optional.ofNullable(request.getHeader(AUTHORIZATION))
                 .map(header -> header.replaceFirst("^" + BEARER, ""))
                 .map(String::trim)
@@ -44,6 +47,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 .map(Object::toString)
                 .map(this::buildAuthToken)
                 .orElseThrow();
+
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
         filterChain.doFilter(request, response);
