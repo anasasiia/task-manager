@@ -22,7 +22,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.List;
 
-import static hexlet.code.controller.StatusController.ID;
 import static hexlet.code.controller.StatusController.STATUS_CONTROLLER_PATH;
 import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
 import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;

@@ -52,8 +52,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task updateTask(final long id, final TaskDto taskDto) {
         Task task = taskRepository.findById(id).get();
-        final User executor = userRepository.findById(id).get();
-        final TaskStatus status = statusRepository.findById(id).get();
+        final User executor = userRepository.findById(taskDto.getExecutorId()).get();
+        final TaskStatus status = statusRepository.findById(taskDto.getStatusId()).get();
 
         task.setName(taskDto.getName());
         task.setDescription(taskDto.getDescription());

@@ -35,7 +35,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -63,6 +66,56 @@ public class TaskControllerTest {
     @AfterEach
     public final void clear() {
         testUtils.tearDown();
+    }
+
+    @Test
+    public void updateTask() throws Exception {
+        testUtils.regDefaultUser();
+        testUtils.createDefaultStatus();
+        testUtils.createDefaultLabel();
+
+        final TaskStatus status = statusRepository.findAll().get(0);
+        final User executor = userRepository.findByEmail(TEST_USERNAME).get();
+        final Label label = labelRepository.findAll().get(0);
+
+        final TaskDto taskDto = new TaskDto(
+                "task",
+                "description",
+                status.getId(),
+                executor.getId(),
+                List.of(label.getId())
+        );
+
+        testUtils.perform(post(baseUrl)
+                        .content(asJson(taskDto))
+                        .contentType(APPLICATION_JSON),
+                TEST_USERNAME);
+
+        final long taskId = taskRepository.findAll().get(0).getId();
+
+        final TaskDto updateDto = new TaskDto(
+                "new name",
+                "new description",
+                status.getId(),
+                executor.getId(),
+                List.of(label.getId())
+        );
+
+        final var response = testUtils.perform(
+                        put(baseUrl + ID, taskId)
+                                .content(asJson(updateDto))
+                                .contentType(APPLICATION_JSON),
+                        TEST_USERNAME)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        final Task task = fromJson(response.getContentAsString(), new TypeReference<Task>() {
+        });
+
+        assertTrue(taskRepository.existsById(taskId));
+        assertEquals(task.getName(), updateDto.getName());
+        assertEquals(task.getDescription(), updateDto.getDescription());
     }
 
     @Test
@@ -192,56 +245,6 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void updateTask() throws Exception {
-        testUtils.regDefaultUser();
-        testUtils.createDefaultStatus();
-        testUtils.createDefaultLabel();
-
-        final TaskStatus status = statusRepository.findAll().get(0);
-        final User executor = userRepository.findByEmail(TEST_USERNAME).get();
-        final Label label = labelRepository.findAll().get(0);
-
-        final TaskDto taskDto = new TaskDto(
-                "task",
-                "description",
-                status.getId(),
-                executor.getId(),
-                List.of(label.getId())
-        );
-
-        testUtils.perform(post(baseUrl)
-                        .content(asJson(taskDto))
-                        .contentType(APPLICATION_JSON),
-                TEST_USERNAME);
-
-        final long taskId = taskRepository.findAll().get(0).getId();
-
-        final TaskDto updateDto = new TaskDto(
-                "new name",
-                "new description",
-                status.getId(),
-                executor.getId(),
-                List.of(label.getId())
-        );
-
-        final var response = testUtils.perform(
-                        put(baseUrl + ID, taskId)
-                        .content(asJson(updateDto))
-                        .contentType(APPLICATION_JSON),
-                        TEST_USERNAME)
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse();
-
-        final Task task = fromJson(response.getContentAsString(), new TypeReference<Task>() {
-        });
-
-        assertTrue(userRepository.existsById(taskId));
-        assertEquals(task.getName(), updateDto.getName());
-        assertEquals(task.getDescription(), updateDto.getDescription());
-    }
-
-    @Test
     public void deleteTask() throws Exception {
         testUtils.regDefaultUser();
         testUtils.createDefaultStatus();
@@ -346,7 +349,10 @@ public class TaskControllerTest {
                 TEST_USERNAME);
 
         final var response = testUtils.perform(
-                        get(baseUrl + "?taskStatus=" + status.getId() + "&executorId=" + executor.getId() + "&labels=" + label1.getId()),
+                        get(baseUrl
+                                + "?taskStatus=" + status.getId()
+                                + "&executorId=" + executor.getId()
+                                + "&labels=" + label1.getId()),
                         TEST_USERNAME)
                 .andExpect(status().isOk())
                 .andReturn()

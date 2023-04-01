@@ -20,7 +20,9 @@ import java.util.List;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.StatusController.STATUS_CONTROLLER_PATH;
 import static hexlet.code.controller.UserController.ID;
-import static hexlet.code.utils.TestUtils.*;
+import static hexlet.code.utils.TestUtils.TEST_USERNAME;
+import static hexlet.code.utils.TestUtils.asJson;
+import static hexlet.code.utils.TestUtils.fromJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -85,7 +87,8 @@ public class StatusControllerTest {
                 .andReturn()
                 .getResponse();
 
-        final List<TaskStatus> statuses = fromJson(response.getContentAsString(), new TypeReference<List<TaskStatus>>() {
+        final List<TaskStatus> statuses = fromJson(response.getContentAsString(),
+                new TypeReference<List<TaskStatus>>() {
         });
 
         assertThat(statuses).hasSize(1);

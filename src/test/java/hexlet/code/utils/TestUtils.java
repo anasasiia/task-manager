@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.component.JWTHelper;
 import hexlet.code.dto.LabelDto;
 import hexlet.code.dto.StatusDto;
-import hexlet.code.dto.TaskDto;
 import hexlet.code.dto.UserDto;
-import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.StatusRepository;
@@ -104,7 +102,7 @@ public class TestUtils {
         return createLabel(getTestLabelDto());
     }
 
-    private ResultActions createLabel(LabelDto testLabelDto) throws Exception{
+    private ResultActions createLabel(LabelDto testLabelDto) throws Exception {
         final var request = post("/api" + LABEL_CONTROLLER_PATH)
                 .content(asJson(testLabelDto))
                 .contentType(APPLICATION_JSON);
