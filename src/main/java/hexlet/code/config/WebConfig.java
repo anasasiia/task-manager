@@ -10,11 +10,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
     private final String baseApiPath;
 
-    public WebConfiguration(@Value("${base-url}") String baseApiPath1) {
+    public WebConfig(@Value("${base-url}") String baseApiPath1) {
         this.baseApiPath = baseApiPath1;
     }
 

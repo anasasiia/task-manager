@@ -11,16 +11,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration()
 @ComponentScan(basePackages = "hexlet.code")
 public class RollbarConfig {
-    @Value("${rollbar.token}")
-    private String rollbarToken;
     @Bean
     public Rollbar rollbar() {
-        return new Rollbar(getRollbarConfigs(rollbarToken));
+        return new Rollbar(getRollbarConfigs("05b126c7c16a404fb2f14add74dca571"));
     }
+
     private Config getRollbarConfigs(String accessToken) {
-        // Reference ConfigBuilder.java for all the properties you can set for Rollbar
         return RollbarSpringConfigBuilder.withAccessToken(accessToken)
-                .environment("production")
+                .environment("development")
                 .build();
     }
 }

@@ -82,7 +82,8 @@ public class StatusControllerTest {
         testUtils.perform(createTaskStatusRequest1, TEST_USERNAME);
 
         final var response = testUtils.perform(
-                        get(baseUrl)
+                        get(baseUrl),
+                        TEST_USERNAME
                 ).andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
