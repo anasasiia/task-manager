@@ -19,7 +19,7 @@ public class TaskDto {
 
     private String description;
 
-    private long statusId;
+    private long taskStatusId;
 
     private long executorId;
 

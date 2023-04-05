@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
     public Task createTask(final TaskDto taskDto) {
         final Task task = new Task();
         final User author = userService.getCurrentUser();
-        final TaskStatus status = statusRepository.findById(taskDto.getStatusId()).get();
+        final TaskStatus status = statusRepository.findById(taskDto.getTaskStatusId()).get();
         final User executor = userRepository.findById(taskDto.getExecutorId()).get();
 
         task.setName(taskDto.getName());
@@ -53,7 +53,7 @@ public class TaskServiceImpl implements TaskService {
     public Task updateTask(final long id, final TaskDto taskDto) {
         Task task = taskRepository.findById(id).get();
         final User executor = userRepository.findById(taskDto.getExecutorId()).get();
-        final TaskStatus status = statusRepository.findById(taskDto.getStatusId()).get();
+        final TaskStatus status = statusRepository.findById(taskDto.getTaskStatusId()).get();
 
         task.setName(taskDto.getName());
         task.setDescription(taskDto.getDescription());
