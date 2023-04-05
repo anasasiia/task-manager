@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
 
         task.setName(taskDto.getName());
         task.setDescription(taskDto.getDescription());
-        task.setStatus(status);
+        task.setTaskStatus(status);
         task.setAuthor(author);
         task.setExecutor(executor);
 
@@ -57,7 +57,7 @@ public class TaskServiceImpl implements TaskService {
 
         task.setName(taskDto.getName());
         task.setDescription(taskDto.getDescription());
-        task.setStatus(status);
+        task.setTaskStatus(status);
         task.setExecutor(executor);
 
         if (taskDto.getLabelIds() != null) {

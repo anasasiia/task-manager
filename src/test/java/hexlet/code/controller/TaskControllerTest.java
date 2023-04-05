@@ -203,7 +203,7 @@ public class TaskControllerTest {
 
         assertEquals(task.getName(), expectedTask.getName());
         assertEquals(task.getDescription(), expectedTask.getDescription());
-        assertEquals(task.getStatus().getName(), status.getName());
+        assertEquals(task.getTaskStatus().getName(), status.getName());
         assertEquals(task.getLabels().get(0).getName(), label.getName());
         assertEquals(task.getExecutor().getFirstName(), executor.getFirstName());
     }
