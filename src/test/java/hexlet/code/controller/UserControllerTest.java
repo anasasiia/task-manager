@@ -82,6 +82,7 @@ public class UserControllerTest {
         assertEquals(expectedUser.getLastName(), user.getLastName());
     }
 
+    // Вместо 403 ошибки приходит No value present
 //    @Test
 //    public void getUserByIdFails() throws Exception {
 //        utils.regDefaultUser();
@@ -104,6 +105,7 @@ public class UserControllerTest {
         assertThat(users).hasSize(1);
     }
 
+    // Вместо 403 ошибки приходит No value present
 //    @Test
 //    public void twiceRegTheSameUserFail() throws Exception {
 //        utils.regDefaultUser().andExpect(status().isCreated());

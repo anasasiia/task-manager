@@ -275,6 +275,7 @@ public class TaskControllerTest {
         assertEquals(taskRepository.count(), 0);
     }
 
+    // Вместо 403 ошибки приходит No value present
 //    @Test
 //    public void deleteTaskFail() throws Exception {
 //        testUtils.regDefaultUser();
@@ -303,7 +304,7 @@ public class TaskControllerTest {
 //        testUtils.perform(delete(baseUrl + ID, taskId))
 //                .andExpect(status().isForbidden());
 //
-//        assertEquals(taskRepository.count(), 0);
+//        assertEquals(taskRepository.count(), 1);
 //    }
 
     @Test

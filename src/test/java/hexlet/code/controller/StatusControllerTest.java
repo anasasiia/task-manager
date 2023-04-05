@@ -115,6 +115,7 @@ public class StatusControllerTest {
         assertEquals(1, statusRepository.count());
     }
 
+    // Вместо 403 ошибки приходит No value present
 //    @Test
 //    public void createNewTaskStatusFail() throws Exception {
 //        testUtils.regDefaultUser();
@@ -172,6 +173,7 @@ public class StatusControllerTest {
         assertEquals(statusRepository.count(), 0);
     }
 
+    // Вместо 403 ошибки приходит No value present
 //    @Test
 //    public void deleteTaskStatusFail() throws Exception {
 //        testUtils.regDefaultUser();

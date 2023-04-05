@@ -145,16 +145,18 @@ public class LabelControllerTest {
         assertEquals(labelRepository.count(), 0);
     }
 
-//    @Test
-//    public void deleteLabelFail() throws Exception {
-//        testUtils.regDefaultUser();
-//        testUtils.createDefaultLabel();
-//
-//        final long labelId = labelRepository.findAll().get(0).getId();
-//
-//        testUtils.perform(delete(baseUrl + ID, labelId))
-//                .andExpect(status().isForbidden());
-//
-//        assertEquals(labelRepository.count(), 1);
-//    }
+    // Вместо 403 ошибки приходит No value present
+/*    @Test
+    public void deleteLabelFail() throws Exception {
+        testUtils.regDefaultUser();
+        testUtils.createDefaultLabel();
+
+        final long labelId = labelRepository.findAll().get(0).getId();
+
+        testUtils.perform(delete(baseUrl + ID, labelId))
+                .andExpect(status().isForbidden());
+
+        assertEquals(labelRepository.count(), 1);
+    }
+ */
 }
