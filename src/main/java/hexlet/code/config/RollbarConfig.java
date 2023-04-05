@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration()
-@ComponentScan(basePackages = "hexlet.code")
+@ComponentScan({"hexlet.code", "com.rollbar.spring"})
 public class RollbarConfig {
     @Bean
     public Rollbar rollbar() {
