@@ -111,6 +111,10 @@ jacocoTestReport {
 	}
 }
 
+test {
+	finalizedBy jacocoTestReport
+}
+
 frontend {
 	nodeVersion = '16.13.1'
 	installScript = 'install'
