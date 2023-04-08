@@ -48,25 +48,25 @@ public class UserControllerTest {
     private UserRepository userRepository;
 
     @Autowired
-    private TestUtils utils;
+    private TestUtils testUtils;
 
     @AfterEach
     public final void clear() {
-        utils.tearDown();
+        testUtils.tearDown();
     }
 
     @Test
     public void registration() throws Exception {
         assertEquals(0, userRepository.count());
-        utils.regDefaultUser().andExpect(status().isCreated());
+        testUtils.regDefaultUser().andExpect(status().isCreated());
         assertEquals(1, userRepository.count());
     }
 
     @Test
     public void getUserById() throws Exception {
-        utils.regDefaultUser();
+        testUtils.regDefaultUser();
         final User expectedUser = userRepository.findAll().get(0);
-        final var response = utils.perform(
+        final var response = testUtils.perform(
                 get("/api" + USER_CONTROLLER_PATH + ID, expectedUser.getId()),
                         expectedUser.getEmail()
                 ).andExpect(status().isOk())
@@ -93,8 +93,8 @@ public class UserControllerTest {
 
     @Test
     public void getAllUsers() throws Exception {
-        utils.regDefaultUser();
-        final var response = utils.perform(get("/api" + USER_CONTROLLER_PATH))
+        testUtils.regDefaultUser();
+        final var response = testUtils.perform(get("/api" + USER_CONTROLLER_PATH))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
@@ -116,32 +116,32 @@ public class UserControllerTest {
 
     @Test
     public void login() throws Exception {
-        utils.regDefaultUser();
+        testUtils.regDefaultUser();
         final LoginDto loginDto = new LoginDto(
-                utils.getTestRegistrationDto().getFirstName(),
-                utils.getTestRegistrationDto().getLastName(),
-                utils.getTestRegistrationDto().getEmail(),
-                utils.getTestRegistrationDto().getPassword()
+                testUtils.getTestRegistrationDto().getFirstName(),
+                testUtils.getTestRegistrationDto().getLastName(),
+                testUtils.getTestRegistrationDto().getEmail(),
+                testUtils.getTestRegistrationDto().getPassword()
         );
 
         final var loginRequest = post("/api" + LOGIN).content(asJson(loginDto)).contentType(APPLICATION_JSON);
-        utils.perform(loginRequest).andExpect(status().isOk());
+        testUtils.perform(loginRequest).andExpect(status().isOk());
     }
 
     @Test
     public void loginFail() throws Exception {
         final LoginDto loginDto = new LoginDto(
-                utils.getTestRegistrationDto().getEmail(),
-                utils.getTestRegistrationDto().getPassword()
+                testUtils.getTestRegistrationDto().getEmail(),
+                testUtils.getTestRegistrationDto().getPassword()
         );
 
         final var loginRequest = post("/api" + LOGIN).content(asJson(loginDto)).contentType(APPLICATION_JSON);
-        utils.perform(loginRequest).andExpect(status().isUnauthorized());
+        testUtils.perform(loginRequest).andExpect(status().isUnauthorized());
     }
 
     @Test
     public void updateUser() throws Exception {
-        utils.regDefaultUser();
+        testUtils.regDefaultUser();
 
         final Long userId = userRepository.findByEmail(TEST_USERNAME).get().getId();
 
@@ -151,7 +151,7 @@ public class UserControllerTest {
                 .content(asJson(userDto))
                 .contentType(APPLICATION_JSON);
 
-        utils.perform(updateRequest, TEST_USERNAME).andExpect(status().isOk());
+        testUtils.perform(updateRequest, TEST_USERNAME).andExpect(status().isOk());
 
         assertTrue(userRepository.existsById(userId));
         assertNull(userRepository.findByEmail(TEST_USERNAME).orElse(null));
@@ -160,11 +160,11 @@ public class UserControllerTest {
 
     @Test
     public void deleteUser() throws Exception {
-        utils.regDefaultUser();
+        testUtils.regDefaultUser();
 
         final Long userId = userRepository.findByEmail(TEST_USERNAME).get().getId();
 
-        utils.perform(delete("/api" + USER_CONTROLLER_PATH + ID, userId), TEST_USERNAME)
+        testUtils.perform(delete("/api" + USER_CONTROLLER_PATH + ID, userId), TEST_USERNAME)
                 .andExpect(status().isOk());
 
         assertEquals(0, userRepository.count());
@@ -172,8 +172,8 @@ public class UserControllerTest {
 
     @Test
     public void deleteUserFails() throws Exception {
-        utils.regDefaultUser();
-        utils.regUser(new UserDto(
+        testUtils.regDefaultUser();
+        testUtils.regUser(new UserDto(
                 TEST_USERNAME_2,
                 "fname",
                 "lname",
@@ -182,7 +182,7 @@ public class UserControllerTest {
 
         final Long userId = userRepository.findByEmail(TEST_USERNAME).get().getId();
 
-        utils.perform(delete("/api" + USER_CONTROLLER_PATH + ID, userId), TEST_USERNAME_2)
+        testUtils.perform(delete("/api" + USER_CONTROLLER_PATH + ID, userId), TEST_USERNAME_2)
                 .andExpect(status().isForbidden());
         assertEquals(2, userRepository.count());
     }

@@ -7,6 +7,7 @@ import hexlet.code.model.Label;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.utils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,11 @@ public class LabelControllerTest {
     @Autowired
     private TestUtils testUtils;
 
+    @BeforeEach
+    public final void registerUser() throws Exception {
+        testUtils.regDefaultUser();
+    }
+
     @AfterEach
     public final void clear() {
         testUtils.tearDown();
@@ -54,25 +60,11 @@ public class LabelControllerTest {
 
     @Test
     public void createLabel() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultLabel().andExpect(status().isCreated());
     }
 
-//    @Test
-//    public void createLabelFail() throws Exception {
-//        testUtils.regDefaultUser();
-//
-//        final LabelDto labelDto = new LabelDto("new label");
-//
-//        final var request = post(baseUrl)
-//                .content(asJson(labelDto))
-//                .contentType(APPLICATION_JSON);
-//        testUtils.perform(request).andExpect(status().isForbidden());
-//    }
-
     @Test
     public void getLabelById() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultLabel();
 
         final Label expectedLabel = labelRepository.findAll().get(0);
@@ -92,7 +84,6 @@ public class LabelControllerTest {
 
     @Test
     public void getAllLabels() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultLabel();
 
         final var response = testUtils.perform(
@@ -110,7 +101,6 @@ public class LabelControllerTest {
 
     @Test
     public void updateLabel() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultLabel();
 
         final long labelToUpdateId = labelRepository.findAll().get(0).getId();
@@ -134,7 +124,6 @@ public class LabelControllerTest {
 
     @Test
     public void deleteLabel() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultLabel();
 
         final long labelId = labelRepository.findAll().get(0).getId();

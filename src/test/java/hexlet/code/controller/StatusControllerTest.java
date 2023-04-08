@@ -7,6 +7,7 @@ import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.StatusRepository;
 import hexlet.code.utils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,11 @@ public class StatusControllerTest {
     @Autowired
     private TestUtils testUtils;
 
+    @BeforeEach
+    public final void registerUser() throws Exception {
+        testUtils.regDefaultUser();
+    }
+
     @AfterEach
     public final void clear() {
         testUtils.tearDown();
@@ -54,7 +60,6 @@ public class StatusControllerTest {
 
     @Test
     public void getStatusById() throws Exception {
-        testUtils.regDefaultUser();
         final StatusDto dto = new StatusDto("New task status");
         final var createTaskStatusRequest = post(baseUrl).content(asJson(dto)).contentType(APPLICATION_JSON);
         testUtils.perform(createTaskStatusRequest, TEST_USERNAME).andExpect(status().isCreated());
@@ -76,7 +81,6 @@ public class StatusControllerTest {
 
     @Test
     public void getAllTaskStatuses() throws Exception {
-        testUtils.regDefaultUser();
         final StatusDto dto = new StatusDto("Task status 1");
         final var createTaskStatusRequest1 = post(baseUrl).content(asJson(dto)).contentType(APPLICATION_JSON);
         testUtils.perform(createTaskStatusRequest1, TEST_USERNAME);
@@ -97,7 +101,6 @@ public class StatusControllerTest {
 
     @Test
     public void createNewTaskStatus() throws Exception {
-        testUtils.regDefaultUser();
         final StatusDto dto = new StatusDto("New task status");
         final var response = testUtils.perform(
                         post(baseUrl)
@@ -131,8 +134,6 @@ public class StatusControllerTest {
 
     @Test
     public void updateTaskStatus() throws Exception {
-        testUtils.regDefaultUser();
-
         final StatusDto dto = new StatusDto("Task status 1");
 
         final var createTaskStatusRequest1 = post(baseUrl).content(asJson(dto)).contentType(APPLICATION_JSON);
@@ -159,8 +160,6 @@ public class StatusControllerTest {
 
     @Test
     public void deleteTaskStatus() throws Exception {
-        testUtils.regDefaultUser();
-
         final StatusDto dto = new StatusDto("Task status 1");
         final var createTaskStatusRequest1 = post(baseUrl).content(asJson(dto)).contentType(APPLICATION_JSON);
         testUtils.perform(createTaskStatusRequest1, TEST_USERNAME);

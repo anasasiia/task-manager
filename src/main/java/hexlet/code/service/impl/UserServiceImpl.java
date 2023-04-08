@@ -1,8 +1,9 @@
-package hexlet.code.service;
+package hexlet.code.service.impl;
 
 import hexlet.code.dto.UserDto;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
+import hexlet.code.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,11 +53,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .map(this::buildSpringUser)
+                .map(this::buildUserDetailsByUser)
                 .orElseThrow(() -> new UsernameNotFoundException("Not found user with 'username': " + username));
     }
 
-    private UserDetails buildSpringUser(final User user) {
+    private UserDetails buildUserDetailsByUser(final User user) {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),

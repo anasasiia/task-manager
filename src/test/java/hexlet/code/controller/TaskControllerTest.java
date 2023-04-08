@@ -14,6 +14,7 @@ import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.utils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,11 @@ public class TaskControllerTest {
     @Autowired
     private TestUtils testUtils;
 
+    @BeforeEach
+    public final void registerUser() throws Exception {
+        testUtils.regDefaultUser();
+    }
+
     @AfterEach
     public final void clear() {
         testUtils.tearDown();
@@ -70,7 +76,6 @@ public class TaskControllerTest {
 
     @Test
     public void updateTask() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultStatus();
         testUtils.createDefaultLabel();
 
@@ -120,7 +125,6 @@ public class TaskControllerTest {
 
     @Test
     public void createTask() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultStatus();
         testUtils.createDefaultLabel();
 
@@ -144,7 +148,6 @@ public class TaskControllerTest {
 
     @Test
     public void createTaskFail() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultStatus();
         testUtils.createDefaultLabel();
 
@@ -168,7 +171,6 @@ public class TaskControllerTest {
 
     @Test
     public void getTaskById() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultStatus();
         testUtils.createDefaultLabel();
 
@@ -210,7 +212,6 @@ public class TaskControllerTest {
 
     @Test
     public void getAllTasks() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultStatus();
         testUtils.createDefaultLabel();
 
@@ -246,7 +247,6 @@ public class TaskControllerTest {
 
     @Test
     public void deleteTask() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultStatus();
         testUtils.createDefaultLabel();
 
@@ -309,7 +309,6 @@ public class TaskControllerTest {
 
     @Test
     public void getTasksByFilter() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.createDefaultStatus();
         testUtils.createDefaultLabel();
 
