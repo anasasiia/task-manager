@@ -8,6 +8,7 @@ import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.utils.TestUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,11 @@ public class UserControllerTest {
     @Autowired
     private TestUtils testUtils;
 
+    @BeforeEach
+    public final void registerUser() throws Exception {
+        testUtils.regDefaultUser();
+    }
+
     @AfterEach
     public final void clear() {
         testUtils.tearDown();
@@ -57,9 +63,19 @@ public class UserControllerTest {
 
     @Test
     public void registration() throws Exception {
-        assertEquals(0, userRepository.count());
-        testUtils.regDefaultUser().andExpect(status().isCreated());
         assertEquals(1, userRepository.count());
+
+        final UserDto userDto = new UserDto(TEST_USERNAME_2,
+                testUtils.getTestRegistrationDto().getFirstName(),
+                testUtils.getTestRegistrationDto().getLastName(),
+                testUtils.getTestRegistrationDto().getPassword());
+
+        final var request = post("/api" + USER_CONTROLLER_PATH)
+                        .content(asJson(userDto))
+                        .contentType(APPLICATION_JSON);
+
+        testUtils.perform(request).andExpect(status().isCreated());
+        assertEquals(2, userRepository.count());
     }
 
     @Test
@@ -131,7 +147,7 @@ public class UserControllerTest {
     @Test
     public void loginFail() throws Exception {
         final LoginDto loginDto = new LoginDto(
-                testUtils.getTestRegistrationDto().getEmail(),
+                TEST_USERNAME_2,
                 testUtils.getTestRegistrationDto().getPassword()
         );
 
