@@ -80,7 +80,6 @@ public class UserControllerTest {
 
     @Test
     public void getUserById() throws Exception {
-        testUtils.regDefaultUser();
         final User expectedUser = userRepository.findAll().get(0);
         final var response = testUtils.perform(
                 get("/api" + USER_CONTROLLER_PATH + ID, expectedUser.getId()),
@@ -101,15 +100,13 @@ public class UserControllerTest {
     // Вместо 403 ошибки приходит No value present
 //    @Test
 //    public void getUserByIdFails() throws Exception {
-//        utils.regDefaultUser();
 //        final User expectedUser = userRepository.findAll().get(0);
-//        utils.perform(get("/api" + USER_CONTROLLER_PATH + ID, expectedUser.getId()))
+//        testUtils.perform(get("/api" + USER_CONTROLLER_PATH + ID, expectedUser.getId()))
 //                .andExpect(status().isUnauthorized());
 //    }
 
     @Test
     public void getAllUsers() throws Exception {
-        testUtils.regDefaultUser();
         final var response = testUtils.perform(get("/api" + USER_CONTROLLER_PATH))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -121,18 +118,15 @@ public class UserControllerTest {
         assertThat(users).hasSize(1);
     }
 
-    // Вместо 403 ошибки приходит No value present
-//    @Test
-//    public void twiceRegTheSameUserFail() throws Exception {
-//        utils.regDefaultUser().andExpect(status().isCreated());
-//        utils.regDefaultUser().andExpect(status().isBadRequest());
-//
-//        assertEquals(1, userRepository.count());
-//    }
+    @Test
+    public void twiceRegTheSameUserFail() throws Exception {
+        testUtils.regDefaultUser().andExpect(status().isUnprocessableEntity());
+
+        assertEquals(1, userRepository.count());
+    }
 
     @Test
     public void login() throws Exception {
-        testUtils.regDefaultUser();
         final LoginDto loginDto = new LoginDto(
                 testUtils.getTestRegistrationDto().getFirstName(),
                 testUtils.getTestRegistrationDto().getLastName(),
@@ -157,8 +151,6 @@ public class UserControllerTest {
 
     @Test
     public void updateUser() throws Exception {
-        testUtils.regDefaultUser();
-
         final Long userId = userRepository.findByEmail(TEST_USERNAME).get().getId();
 
         final var userDto = new UserDto(TEST_USERNAME_2, "new name", "new last name", "new pwd");
@@ -176,8 +168,6 @@ public class UserControllerTest {
 
     @Test
     public void deleteUser() throws Exception {
-        testUtils.regDefaultUser();
-
         final Long userId = userRepository.findByEmail(TEST_USERNAME).get().getId();
 
         testUtils.perform(delete("/api" + USER_CONTROLLER_PATH + ID, userId), TEST_USERNAME)
@@ -188,7 +178,6 @@ public class UserControllerTest {
 
     @Test
     public void deleteUserFails() throws Exception {
-        testUtils.regDefaultUser();
         testUtils.regUser(new UserDto(
                 TEST_USERNAME_2,
                 "fname",
