@@ -21,9 +21,7 @@ import java.util.List;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.LabelController.LABEL_CONTROLLER_PATH;
 import static hexlet.code.controller.UserController.ID;
-import static hexlet.code.utils.TestUtils.TEST_USERNAME;
-import static hexlet.code.utils.TestUtils.asJson;
-import static hexlet.code.utils.TestUtils.fromJson;
+import static hexlet.code.utils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -133,19 +131,4 @@ public class LabelControllerTest {
 
         assertEquals(labelRepository.count(), 0);
     }
-
-    // Вместо 403 ошибки приходит No value present
-/*    @Test
-    public void deleteLabelFail() throws Exception {
-        testUtils.regDefaultUser();
-        testUtils.createDefaultLabel();
-
-        final long labelId = labelRepository.findAll().get(0).getId();
-
-        testUtils.perform(delete(baseUrl + ID, labelId))
-                .andExpect(status().isForbidden());
-
-        assertEquals(labelRepository.count(), 1);
-    }
- */
 }

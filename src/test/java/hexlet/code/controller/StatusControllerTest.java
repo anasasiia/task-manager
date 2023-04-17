@@ -118,20 +118,6 @@ public class StatusControllerTest {
         assertEquals(1, statusRepository.count());
     }
 
-    // Вместо 403 ошибки приходит No value present
-//    @Test
-//    public void createNewTaskStatusFail() throws Exception {
-//        testUtils.regDefaultUser();
-//        final StatusDto dto = new StatusDto("New task status");
-//        testUtils.perform(
-//                post(baseUrl)
-//                .content(asJson(dto))
-//                .contentType(APPLICATION_JSON)
-//                ).andExpect(status().isForbidden())
-//                .andReturn()
-//                .getResponse();
-//    }
-
     @Test
     public void updateTaskStatus() throws Exception {
         final StatusDto dto = new StatusDto("Task status 1");
@@ -172,20 +158,4 @@ public class StatusControllerTest {
         assertEquals(statusRepository.count(), 0);
     }
 
-    // Вместо 403 ошибки приходит No value present
-//    @Test
-//    public void deleteTaskStatusFail() throws Exception {
-//        testUtils.regDefaultUser();
-//
-//        final StatusDto dto = new StatusDto("Task status 1");
-//        final var createTaskStatusRequest1 = post(baseUrl).content(asJson(dto)).contentType(APPLICATION_JSON);
-//        testUtils.perform(createTaskStatusRequest1, TEST_USERNAME);
-//
-//        final long taskStatusId = statusRepository.findAll().get(0).getId();
-//
-//        testUtils.perform(delete(baseUrl + ID, taskStatusId))
-//                .andExpect(status().isForbidden());
-//
-//        assertEquals(statusRepository.count(), 1);
-//    }
 }

@@ -28,9 +28,7 @@ import java.util.List;
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.TaskController.TASK_CONTROLLER_PATH;
 import static hexlet.code.controller.UserController.ID;
-import static hexlet.code.utils.TestUtils.TEST_USERNAME;
-import static hexlet.code.utils.TestUtils.asJson;
-import static hexlet.code.utils.TestUtils.fromJson;
+import static hexlet.code.utils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -275,37 +273,36 @@ public class TaskControllerTest {
         assertEquals(taskRepository.count(), 0);
     }
 
-    // Вместо 403 ошибки приходит No value present
-//    @Test
-//    public void deleteTaskFail() throws Exception {
-//        testUtils.regDefaultUser();
-//        testUtils.createDefaultStatus();
-//        testUtils.createDefaultLabel();
-//
-//        final TaskStatus status = statusRepository.findAll().get(0);
-//        final User executor = userRepository.findByEmail(TEST_USERNAME).get();
-//        final Label label = labelRepository.findAll().get(0);
-//
-//        final TaskDto taskDto = new TaskDto(
-//                "task",
-//                "description",
-//                status.getId(),
-//                executor.getId(),
-//                List.of(label.getId())
-//        );
-//
-//        testUtils.perform(post(baseUrl)
-//                        .content(asJson(taskDto))
-//                        .contentType(APPLICATION_JSON),
-//                TEST_USERNAME);
-//
-//        final long taskId = taskRepository.findAll().get(0).getId();
-//
-//        testUtils.perform(delete(baseUrl + ID, taskId))
-//                .andExpect(status().isForbidden());
-//
-//        assertEquals(taskRepository.count(), 1);
-//    }
+    @Test
+    public void deleteTaskFail() throws Exception {
+        testUtils.regDefaultUser();
+        testUtils.createDefaultStatus();
+        testUtils.createDefaultLabel();
+
+        final TaskStatus status = statusRepository.findAll().get(0);
+        final User executor = userRepository.findByEmail(TEST_USERNAME).get();
+        final Label label = labelRepository.findAll().get(0);
+
+        final TaskDto taskDto = new TaskDto(
+                "task",
+                "description",
+                status.getId(),
+                executor.getId(),
+                List.of(label.getId())
+        );
+
+        testUtils.perform(post(baseUrl)
+                        .content(asJson(taskDto))
+                        .contentType(APPLICATION_JSON),
+                TEST_USERNAME);
+
+        final long taskId = taskRepository.findAll().get(0).getId();
+
+        testUtils.perform(delete(baseUrl + ID, taskId), TEST_USERNAME_2)
+                .andExpect(status().isForbidden());
+
+        assertEquals(taskRepository.count(), 1);
+    }
 
     @Test
     public void getTasksByFilter() throws Exception {
